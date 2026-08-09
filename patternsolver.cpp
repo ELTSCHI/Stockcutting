@@ -79,6 +79,8 @@ bool PatternSolver::solveRelaxed() {
 }
 
 bool PatternSolver::solveLP() {
+    glp_simplex(lp, nullptr);
+
     glp_iocp parm;
     glp_init_iocp(&parm);
     glp_intopt(lp, &parm);
