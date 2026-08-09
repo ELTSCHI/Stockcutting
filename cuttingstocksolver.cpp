@@ -1,4 +1,5 @@
 #include "cuttingstocksolver.h"
+#include <iostream>
 
 
 CuttingStockSolver::CuttingStockSolver(std::vector<Product> products, std::vector<StockType> stocks) : patternSolver(products, stocks) {
@@ -27,12 +28,14 @@ void CuttingStockSolver::generateInitialPatterns() {
 
 bool CuttingStockSolver::generateNewPattern() {
     std::vector<double> duals = patternSolver.getDualPrices();
+
     for(StockType stock : stocks) {
         // TODO: exclude stocks without better patterns in the next round
         Pattern bestPattern = knapsackSolver.solve(products, stock, duals);
         double reducedCosts = knapsackSolver.reducedCost(bestPattern, stock, duals);
 
-        if(reducedCosts > 1){
+
+        if(reducedCosts < 0.0){
             patternSolver.addPattern(bestPattern);
             return true;
         }
@@ -47,7 +50,8 @@ std::vector<PatternUsage> CuttingStockSolver::solve() {
     generateInitialPatterns();
 
     // pattern generation feedback loop
-    while(true) {
+    int i = 0;
+    while(i < 5) {
         // solve with current patterns
         patternSolver.solveRelaxed();
 
@@ -57,9 +61,24 @@ std::vector<PatternUsage> CuttingStockSolver::solve() {
         if(!added) { // no good patterns missing
             break;
         }
+        i++;
     }
 
+    patternSolver.solveLP();
+
     std::vector<double> patternQuantities = patternSolver.getPrimalValues();
+    std::vector<Pattern> patterns = patternSolver.getPatterns();
+
+    std::vector<PatternUsage> erg;
+    erg.resize(patterns.size());
+    for(int i = 0; i < patterns.size(); i++) {
+        PatternUsage patternUsage;
+        patternUsage.pattern = patterns[i];
+        patternUsage.quantity = patternQuantities[i];
+        erg[i] = patternUsage;
+    }
+
+    return erg;
 
     // TODO: Ganzzahligkeitsbedingung enforcen
 

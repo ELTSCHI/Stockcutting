@@ -1,5 +1,6 @@
 #include "knapsacksolver.h"
 #include <glpk.h>
+#include <iostream>
 
 KnapsackSolver::KnapsackSolver() {}
 
@@ -17,6 +18,7 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
     glp_add_cols(lp, products.size());
     for(int i=1; i < products.size() + 1; i++) {
         glp_set_col_bnds(lp, i, GLP_LO, 0.0, 0.0);
+        glp_set_col_kind(lp, i, GLP_IV);
     }
 
     // objective
@@ -36,15 +38,19 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
     }
     glp_load_matrix(lp, products.size(), ia, ja, ar);
 
-    // solve relaxed:
+    // solve ganzzahlig, simplex first:
     glp_simplex(lp, nullptr);
+    glp_iocp parm;
+    glp_init_iocp(&parm);
+    glp_intopt(lp, &parm);
+
 
     // return solution
     std::vector<double> quantities;
     quantities.resize(products.size());
 
     for(int i = 1; i < products.size() + 1; i++) {
-        quantities[i-1] = glp_get_col_prim(lp, i);
+        quantities[i-1] = glp_mip_col_val(lp, i);
     }
 
     Pattern pattern;
@@ -57,9 +63,9 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
 }
 
 double KnapsackSolver::reducedCost(Pattern& bestPattern, StockType& stock, std::vector<double>& dualPrices) {
-    double reducedCost = 0.0;
+    double value = 0.0;
     for(int i=0; i < dualPrices.size(); i++) {
-        reducedCost += dualPrices[i] * bestPattern.quantities[i];
+        value += dualPrices[i] * bestPattern.quantities[i];
     }
-    return reducedCost;
+    return 1-value;
 }
