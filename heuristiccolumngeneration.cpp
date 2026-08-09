@@ -1,5 +1,4 @@
 #include "heuristiccolumngeneration.h"
-#include <iostream>
 
 void HeuristicColumnGeneration::generateInitialPatterns() {
     for(StockType stock : stocks) {

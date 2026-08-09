@@ -1,5 +1,6 @@
 #include "Product.h"
 #include "StockType.h"
+#include "allpattern.h"
 #include "heuristiccolumngeneration.h"
 #include "mainwindow.h"
 
@@ -18,6 +19,7 @@ const StockType stock2{.id = 1, .length = 2880, .cost = 1, .availabilty = -1 };
 std::vector<StockType> stocks = {stock1, stock2};
 
 HeuristicColumnGeneration cuttingStockSolver(products, stocks);
+AllPattern cuttingStockSolver2(products, stocks);
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +38,15 @@ int main(int argc, char *argv[])
     w.show();
 
     std::vector<PatternUsage> erg = cuttingStockSolver.solve();
+    for(auto patternUsage : erg) {
+        std::cout << "Pattern: ";
+        for(auto patternItem : patternUsage.pattern.quantities) {
+            std::cout << patternItem << "|";
+        }
+        std::cout << "Quantity: " << patternUsage.quantity << "\n";
+    }
+
+    erg = cuttingStockSolver2.solve();
     for(auto patternUsage : erg) {
         std::cout << "Pattern: ";
         for(auto patternItem : patternUsage.pattern.quantities) {
