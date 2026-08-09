@@ -1,6 +1,6 @@
 #include "Product.h"
 #include "StockType.h"
-#include "cuttingstocksolver.h"
+#include "heuristiccolumngeneration.h"
 #include "mainwindow.h"
 
 #include <iostream>
@@ -13,11 +13,11 @@ const Product product2{.id = 1, .length = 480, .demand = 7 };
 const Product product3{.id = 2, .length = 735, .demand = 4 };
 std::vector<Product> products = {product1, product2, product3};
 
-const StockType stock1{.id = 0, .length = 2400, .cost = 0, .availabilty = -1 };
-const StockType stock2{.id = 1, .length = 2880, .cost = 0, .availabilty = -1 };
+const StockType stock1{.id = 0, .length = 2400, .cost = 1, .availabilty = -1 };
+const StockType stock2{.id = 1, .length = 2880, .cost = 1, .availabilty = -1 };
 std::vector<StockType> stocks = {stock1, stock2};
 
-CuttingStockSolver cuttingStockSolver(products, stocks);
+HeuristicColumnGeneration cuttingStockSolver(products, stocks);
 
 int main(int argc, char *argv[])
 {

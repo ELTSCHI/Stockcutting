@@ -67,5 +67,5 @@ double KnapsackSolver::reducedCost(Pattern& bestPattern, StockType& stock, std::
     for(int i=0; i < dualPrices.size(); i++) {
         value += dualPrices[i] * bestPattern.quantities[i];
     }
-    return 1-value;
+    return stock.cost-value;
 }

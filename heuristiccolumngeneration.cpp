@@ -1,13 +1,7 @@
-#include "cuttingstocksolver.h"
+#include "heuristiccolumngeneration.h"
 #include <iostream>
 
-
-CuttingStockSolver::CuttingStockSolver(std::vector<Product> products, std::vector<StockType> stocks) : patternSolver(products, stocks) {
-    this->products = products;
-    this->stocks = stocks;
-}
-
-void CuttingStockSolver::generateInitialPatterns() {
+void HeuristicColumnGeneration::generateInitialPatterns() {
     for(StockType stock : stocks) {
         for(Product product : products) {
             int quantity = stock.length / product.length;
@@ -26,7 +20,7 @@ void CuttingStockSolver::generateInitialPatterns() {
     }
 }
 
-bool CuttingStockSolver::generateNewPattern() {
+bool HeuristicColumnGeneration::generateNewPattern() {
     std::vector<double> duals = patternSolver.getDualPrices();
 
     for(StockType stock : stocks) {
@@ -44,7 +38,7 @@ bool CuttingStockSolver::generateNewPattern() {
     return false;
 }
 
-std::vector<PatternUsage> CuttingStockSolver::solve() {
+std::vector<PatternUsage> HeuristicColumnGeneration::solve() {
 
     // add initial Patterns to Problem
     generateInitialPatterns();
@@ -79,7 +73,4 @@ std::vector<PatternUsage> CuttingStockSolver::solve() {
     }
 
     return erg;
-
-    // TODO: Ganzzahligkeitsbedingung enforcen
-
 }
