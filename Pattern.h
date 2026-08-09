@@ -1,6 +1,8 @@
 #ifndef PATTERN_H
 #define PATTERN_H
 
+#include "Product.h"
+
 #include <vector>
 struct Pattern {
     int stockType;

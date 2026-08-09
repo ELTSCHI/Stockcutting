@@ -12,7 +12,7 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
 
     // add constraints
     glp_add_rows(lp, 1);
-    glp_set_row_bnds(lp, 1, GLP_UP, 0.0, stock.length);
+    glp_set_row_bnds(lp, 1, GLP_UP, 0.0, stock.length + stock.sawWidth);
 
     // add variables
     glp_add_cols(lp, products.size());
@@ -34,7 +34,7 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
     for(int i=1; i < products.size() + 1; i++) {
         ia[i] = 1;
         ja[i] = i;
-        ar[i] = products[i-1].length;
+        ar[i] = products[i-1].length + stock.sawWidth;
     }
     glp_load_matrix(lp, products.size(), ia, ja, ar);
 

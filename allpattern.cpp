@@ -1,7 +1,6 @@
 #include "allpattern.h"
 
 void AllPattern::generatePatternRecursive(int productIndex, int remainingLength, std::vector<double>& quantities, int stockId) {
-
     // Abbruchbedingung
     if (productIndex == products.size()) {
         // ignore empty Patterns
@@ -14,9 +13,11 @@ void AllPattern::generatePatternRecursive(int productIndex, int remainingLength,
         }
 
         if (hasProduct) {
-            patternSolver.addPattern({stockId, quantities});
+            Pattern pattern{.stockType = stockId, .quantities = quantities};
+            if(!(checkPatternSize(pattern) > stocks[stockId].length)) {
+                patternSolver.addPattern({stockId, quantities});
+            }
         }
-
         return;
     }
 
@@ -36,10 +37,9 @@ void AllPattern::generatePatternRecursive(int productIndex, int remainingLength,
     }
 
     quantities[productIndex] = 0;
-
 }
 
-void AllPattern::generateAllPattern() { // TODO: availability
+void AllPattern::generateAllPattern() {
 
     for(auto stock : stocks) {
         std::vector<double> quantities(products.size(), 0);

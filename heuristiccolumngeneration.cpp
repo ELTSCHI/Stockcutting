@@ -14,6 +14,10 @@ void HeuristicColumnGeneration::generateInitialPatterns() {
             pattern.quantities.resize(products.size(), 0);
             pattern.quantities[product.id] = quantity;
 
+            while(checkPatternSize(pattern) > stock.length) {
+                pattern.quantities[product.id]--;
+            }
+
             patternSolver.addPattern(pattern);
         }
     }
@@ -22,16 +26,21 @@ void HeuristicColumnGeneration::generateInitialPatterns() {
 bool HeuristicColumnGeneration::generateNewPattern() {
     std::vector<double> duals = patternSolver.getDualPrices();
 
+    Pattern bestPattern = {};
+    double bestReducedCost = 0.0;
     for(StockType stock : stocks) {
-        // TODO: exclude stocks without better patterns in the next round
-        Pattern bestPattern = knapsackSolver.solve(products, stock, duals);
-        double reducedCosts = knapsackSolver.reducedCost(bestPattern, stock, duals);
+        Pattern pattern = knapsackSolver.solve(products, stock, duals);
+        double reducedCosts = knapsackSolver.reducedCost(pattern, stock, duals);
 
-
-        if(reducedCosts < 0.0){
-            patternSolver.addPattern(bestPattern);
-            return true;
+        if(reducedCosts < bestReducedCost) {
+            bestReducedCost = reducedCosts;
+            bestPattern = pattern;
         }
+    }
+
+    if(bestReducedCost < 0.0){
+        patternSolver.addPattern(bestPattern);
+        return true;
     }
 
     return false;

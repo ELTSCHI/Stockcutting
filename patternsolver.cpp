@@ -1,8 +1,6 @@
 #include "patternsolver.h"
 #include <iostream>
 
-// TODO: constraint for stock availability
-
 PatternSolver::PatternSolver(const std::vector<Product>& products, const std::vector<StockType>& stocks) {
     this->products = products;
     this->stocks = stocks;
@@ -12,9 +10,28 @@ PatternSolver::PatternSolver(const std::vector<Product>& products, const std::ve
     glp_set_obj_dir(lp, GLP_MIN);
 
     // add constraints
-    glp_add_rows(lp, products.size());
+    glp_add_rows(lp, products.size() + stocks.size());
+
+    // demand constraint
     for(int i = 1; i < products.size() + 1; i++) {
         glp_set_row_bnds(lp, i, GLP_LO, products[i-1].demand, 0.0);
+    }
+
+    // availability constraint
+    for (int i = 0; i < stocks.size(); i++) {
+        int row = products.size() + i + 1;
+
+        if (stocks[i].availabilty < 0) {
+            glp_set_row_bnds(lp, row, GLP_FR, 0.0, 0.0);
+        } else {
+            glp_set_row_bnds(
+                lp,
+                row,
+                GLP_UP,
+                0.0,
+                stocks[i].availabilty
+                );
+        }
     }
 }
 
@@ -23,9 +40,6 @@ PatternSolver::~PatternSolver(){
 }
 
 void PatternSolver::addPattern(const Pattern& pattern) {
-
-    std::cout << "Columns before: "
-              << glp_get_num_cols(lp) << '\n';
     patterns.push_back(pattern);
 
     // add variable with objective
@@ -35,13 +49,19 @@ void PatternSolver::addPattern(const Pattern& pattern) {
     glp_set_obj_coef(lp, new_col, stocks[pattern.stockType].cost);
 
     // add constraint matrix column
-    int ia[1+products.size()]; // row index
-    double ar[1+products.size()]; // value
+    int ia[1+products.size()+stocks.size()]; // row index
+    double ar[1+products.size() + stocks.size()]; // value
 
+    // demand
     for (int i = 1; i < products.size() + 1; i++) {
         ia[i] = i;
         ar[i] = pattern.quantities[i-1];
     }
+
+    // availability
+    ia[products.size() + 1] = products.size() + pattern.stockType + 1;
+    ar[products.size() + 1] = 1.0;
+
 
     glp_set_mat_col(lp, new_col, products.size(), ia, ar);
 }

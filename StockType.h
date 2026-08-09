@@ -5,7 +5,8 @@ struct StockType {
     int id;
     int length;
     int cost;
-    int availabilty; // -1 for unlimited; has to be -1 at the moment
+    int availabilty; // -1 for unlimited
+    int sawWidth;
 };
 
 #endif // STOCKTYPE_H
