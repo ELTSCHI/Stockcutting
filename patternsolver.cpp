@@ -63,7 +63,7 @@ void PatternSolver::addPattern(const Pattern& pattern) {
     ar[products.size() + 1] = 1.0;
 
 
-    glp_set_mat_col(lp, new_col, products.size(), ia, ar);
+    glp_set_mat_col(lp, new_col, products.size() + 1, ia, ar);
 }
 
 std::vector<double> PatternSolver::getPrimalValues() {
