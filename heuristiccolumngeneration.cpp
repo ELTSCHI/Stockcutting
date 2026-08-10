@@ -50,7 +50,7 @@ bool HeuristicColumnGeneration::generateNewPattern() {
     return false;
 }
 
-std::vector<PatternUsage> HeuristicColumnGeneration::solve() {
+void HeuristicColumnGeneration::solveInternal() {
 
     // add initial Patterns to Problem
     generateInitialPatterns();
@@ -71,18 +71,4 @@ std::vector<PatternUsage> HeuristicColumnGeneration::solve() {
     }
 
     patternSolver.solveLP();
-
-    std::vector<double> patternQuantities = patternSolver.getPrimalValues();
-    std::vector<Pattern> patterns = patternSolver.getPatterns();
-
-    std::vector<PatternUsage> erg;
-    erg.resize(patterns.size());
-    for(int i = 0; i < patterns.size(); i++) {
-        PatternUsage patternUsage;
-        patternUsage.pattern = patterns[i];
-        patternUsage.quantity = patternQuantities[i];
-        erg[i] = patternUsage;
-    }
-
-    return erg;
 }

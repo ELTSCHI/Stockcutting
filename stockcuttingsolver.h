@@ -29,12 +29,31 @@ protected:
         return length;
     }
 
+    virtual void solveInternal() = 0;
+    void removeOverproduction(std::vector<PatternUsage>& erg);
+
 public:
     StockCuttingSolver(std::vector<Product> products, std::vector<StockType> stocks) : patternSolver(products, stocks) {
         this->products = products;
         this->stocks = stocks;
     }
-    virtual std::vector<PatternUsage> solve() = 0;
+
+    std::vector<PatternUsage> solve() {
+        solveInternal();
+        std::vector<double> patternQuantities = patternSolver.getPrimalValues();
+        std::vector<Pattern> patterns = patternSolver.getPatterns();
+
+        std::vector<PatternUsage> erg;
+        erg.resize(patterns.size());
+        for(int i = 0; i < patterns.size(); i++) {
+            PatternUsage patternUsage;
+            patternUsage.pattern = patterns[i];
+            patternUsage.quantity = patternQuantities[i];
+            erg[i] = patternUsage;
+        }
+        removeOverproduction(erg);
+        return erg;
+    }
 };
 
 #endif // STOCKCUTTINGSOLVER_H

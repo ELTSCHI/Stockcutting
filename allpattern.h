@@ -8,10 +8,10 @@ class AllPattern : public StockCuttingSolver
 private:
     void generateAllPattern();
     void generatePatternRecursive(int productIndex, int remainingLength, std::vector<double>& quantities, int stockIndex);
+
+    void solveInternal() override;
 public:
     using StockCuttingSolver::StockCuttingSolver;
-
-    std::vector<PatternUsage> solve() override;
 };
 
 #endif // ALLPATTERN_H

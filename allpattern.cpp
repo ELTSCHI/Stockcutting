@@ -1,4 +1,5 @@
 #include "allpattern.h"
+#include <algorithm>
 
 void AllPattern::generatePatternRecursive(int productIndex, int remainingLength, std::vector<double>& quantities, int stockIndex) {
     // Abbruchbedingung
@@ -22,8 +23,7 @@ void AllPattern::generatePatternRecursive(int productIndex, int remainingLength,
     }
 
     const Product& product = products[productIndex];
-    int maxQuantity = remainingLength / product.length;
-
+    int maxQuantity = std::min(remainingLength / product.length, product.demand);
     for (int quantity = 0; quantity <= maxQuantity; quantity++) {
 
         quantities[productIndex] = quantity;
@@ -53,23 +53,8 @@ void AllPattern::generateAllPattern() {
     }
 }
 
-std::vector<PatternUsage> AllPattern::solve() {
+void AllPattern::solveInternal() {
     generateAllPattern();
 
     patternSolver.solveLP();
-
-    std::vector<double> patternQuantities = patternSolver.getPrimalValues();
-    std::vector<Pattern> patterns = patternSolver.getPatterns();
-
-    std::vector<PatternUsage> erg;
-    erg.resize(patterns.size());
-    for(int i = 0; i < patterns.size(); i++) {
-        PatternUsage patternUsage;
-        patternUsage.pattern = patterns[i];
-        patternUsage.quantity = patternQuantities[i];
-        erg[i] = patternUsage;
-    }
-
-    return erg;
-
 }

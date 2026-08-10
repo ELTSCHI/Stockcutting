@@ -12,10 +12,10 @@ private:
 
     void generateInitialPatterns();
     bool generateNewPattern();
+
+    void solveInternal() override;
 public:
     using StockCuttingSolver::StockCuttingSolver;
-
-    std::vector<PatternUsage> solve() override;
 };
 
 #endif // HEURISTICCOLUMNGENERATION_H
