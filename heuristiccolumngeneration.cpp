@@ -1,8 +1,11 @@
 #include "heuristiccolumngeneration.h"
 
 void HeuristicColumnGeneration::generateInitialPatterns() {
-    for(StockType stock : stocks) {
-        for(Product product : products) {
+    for(int stockIndex = 0; stockIndex < stocks.size(); stockIndex++) {
+        const StockType& stock = stocks[stockIndex];
+
+        for(int productIndex = 0; productIndex < products.size(); productIndex++) {
+            const Product& product = products[productIndex];
             int quantity = stock.length / product.length;
 
             if(quantity == 0) {
@@ -10,12 +13,12 @@ void HeuristicColumnGeneration::generateInitialPatterns() {
             }
 
             Pattern pattern;
-            pattern.stockType = stock.id;
+            pattern.stockIndex = stockIndex;
             pattern.quantities.resize(products.size(), 0);
-            pattern.quantities[product.id] = quantity;
+            pattern.quantities[productIndex] = quantity;
 
             while(checkPatternSize(pattern) > stock.length) {
-                pattern.quantities[product.id]--;
+                pattern.quantities[productIndex]--;
             }
 
             patternSolver.addPattern(pattern);
@@ -28,8 +31,9 @@ bool HeuristicColumnGeneration::generateNewPattern() {
 
     Pattern bestPattern = {};
     double bestReducedCost = 0.0;
-    for(StockType stock : stocks) {
-        Pattern pattern = knapsackSolver.solve(products, stock, duals);
+    for(int stockIndex = 0; stockIndex < stocks.size(); stockIndex++) {
+        const StockType& stock = stocks[stockIndex];
+        Pattern pattern = knapsackSolver.solve(products, stock, stockIndex, duals);
         double reducedCosts = knapsackSolver.reducedCost(pattern, stock, duals);
 
         if(reducedCosts < bestReducedCost) {

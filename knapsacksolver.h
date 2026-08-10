@@ -9,9 +9,9 @@ class KnapsackSolver
 public:
     KnapsackSolver();
 
-    Pattern solve(std::vector<Product>& products, StockType& stock, std::vector<double>& dualPrices);
+    Pattern solve(const std::vector<Product>& products, const StockType& stock, int stockIndex, const std::vector<double>& dualPrices);
 
-    double reducedCost(Pattern& bestPattern, StockType& stock, std::vector<double>& dualPrices);
+    double reducedCost(const Pattern& bestPattern, const StockType& stock, const std::vector<double>& dualPrices);
 };
 
 #endif // KNAPSACKSOLVER_H

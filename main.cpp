@@ -9,17 +9,18 @@
 #include <QLocale>
 #include <QTranslator>
 
-const Product product1{.id = 0, .length = 160, .demand = 6 };
-const Product product2{.id = 1, .length = 480, .demand = 7 };
-const Product product3{.id = 2, .length = 735, .demand = 4 };
+const Product product1{.length = 160, .demand = 6 };
+const Product product2{.length = 480, .demand = 7 };
+const Product product3{.length = 735, .demand = 4 };
 std::vector<Product> products = {product1, product2, product3};
 
-const StockType stock1{.id = 0, .length = 2400, .cost = 1, .availabilty = -1 };
-const StockType stock2{.id = 1, .length = 2880, .cost = 1, .availabilty = -1, .sawWidth = 1 };
+const StockType stock1{.length = 2400, .cost = 1, .availabilty = -1 };
+const StockType stock2{.length = 2880, .cost = 1, .availabilty = -1, .sawWidth = 0 };
 std::vector<StockType> stocks = {stock1, stock2};
 
 HeuristicColumnGeneration cuttingStockSolver(products, stocks);
 AllPattern cuttingStockSolver2(products, stocks);
+
 
 int main(int argc, char *argv[])
 {
@@ -57,3 +58,4 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+

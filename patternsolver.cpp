@@ -46,7 +46,7 @@ void PatternSolver::addPattern(const Pattern& pattern) {
     int new_col = glp_add_cols(lp, 1);
     glp_set_col_bnds(lp, new_col, GLP_LO, 0.0, 0.0);
     glp_set_col_kind(lp, new_col, GLP_IV);
-    glp_set_obj_coef(lp, new_col, stocks[pattern.stockType].cost);
+    glp_set_obj_coef(lp, new_col, stocks[pattern.stockIndex].cost);
 
     // add constraint matrix column
     int ia[1+products.size()+stocks.size()]; // row index
@@ -59,7 +59,7 @@ void PatternSolver::addPattern(const Pattern& pattern) {
     }
 
     // availability
-    ia[products.size() + 1] = products.size() + pattern.stockType + 1;
+    ia[products.size() + 1] = products.size() + pattern.stockIndex + 1;
     ar[products.size() + 1] = 1.0;
 
 

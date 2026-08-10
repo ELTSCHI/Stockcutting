@@ -7,7 +7,7 @@ class AllPattern : public StockCuttingSolver
 {
 private:
     void generateAllPattern();
-    void generatePatternRecursive(int productIndex, int remainingLength, std::vector<double>& quantities, int stockId);
+    void generatePatternRecursive(int productIndex, int remainingLength, std::vector<double>& quantities, int stockIndex);
 public:
     using StockCuttingSolver::StockCuttingSolver;
 

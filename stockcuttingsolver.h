@@ -23,11 +23,12 @@ protected:
         }
 
         if (pieces > 0) {
-            length += (pieces - 1) * stocks[pattern.stockType].sawWidth;
+            length += (pieces - 1) * stocks[pattern.stockIndex].sawWidth;
         }
 
         return length;
     }
+
 public:
     StockCuttingSolver(std::vector<Product> products, std::vector<StockType> stocks) : patternSolver(products, stocks) {
         this->products = products;

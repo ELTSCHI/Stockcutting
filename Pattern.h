@@ -5,8 +5,8 @@
 
 #include <vector>
 struct Pattern {
-    int stockType;
-    std::vector<double> quantities;
+    int stockIndex;              // index into the stocks vector
+    std::vector<double> quantities; // quantities[i] is the count of products[i]
 };
 
 #endif // PATTERN_H

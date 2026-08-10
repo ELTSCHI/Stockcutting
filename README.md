@@ -53,8 +53,8 @@ The console output prints the patterns computed by both solver strategies for th
 | `allpattern.{h,cpp}` | Brute-force pattern enumeration solver |
 | `patternsolver.{h,cpp}` | Builds and solves the pattern LP/MIP with GLPK |
 | `knapsacksolver.{h,cpp}` | Integer knapsack solver for pattern generation |
-| `Product.h` | Product definition (id, length, demand) |
-| `StockType.h` | Stock definition (id, length, cost, availability) |
+| `Product.h` | Product definition (length, demand) |
+| `StockType.h` | Stock definition (length, cost, availability) |
 | `Pattern.h` / `PatternUsage.h` | Cutting pattern and usage data structures |
 | `mainwindow.*` | Qt GUI (placeholder) |
 | `Stockcutting_de_DE.ts` | German translation |
@@ -64,12 +64,13 @@ The console output prints the patterns computed by both solver strategies for th
 Define products and stock types, instantiate a solver and call `solve()`:
 
 ```cpp
-std::vector<Product> products = {{.id = 0, .length = 160, .demand = 6},
-                                 {.id = 1, .length = 480, .demand = 7},
-                                 {.id = 2, .length = 735, .demand = 4}};
+// Products and stocks are identified by their position in the vectors
+std::vector<Product> products = {{.length = 160, .demand = 6},
+                                 {.length = 480, .demand = 7},
+                                 {.length = 735, .demand = 4}};
 
-std::vector<StockType> stocks = {{.id = 0, .length = 2400, .cost = 1, .availabilty = -1},
-                                 {.id = 1, .length = 2880, .cost = 1, .availabilty = -1}};
+std::vector<StockType> stocks = {{.length = 2400, .cost = 1, .availabilty = -1},
+                                 {.length = 2880, .cost = 1, .availabilty = -1}};
 
 HeuristicColumnGeneration solver(products, stocks);
 std::vector<PatternUsage> result = solver.solve();

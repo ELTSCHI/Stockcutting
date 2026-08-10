@@ -4,7 +4,7 @@
 
 KnapsackSolver::KnapsackSolver() {}
 
-Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, std::vector<double>& dualPrices) {
+Pattern KnapsackSolver::solve(const std::vector<Product>& products, const StockType& stock, int stockIndex, const std::vector<double>& dualPrices) {
     glp_prob* lp = glp_create_prob();
 
     // objective dir:
@@ -54,7 +54,7 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
     }
 
     Pattern pattern;
-    pattern.stockType = stock.id;
+    pattern.stockIndex = stockIndex;
     pattern.quantities = quantities;
 
     glp_delete_prob(lp);
@@ -62,7 +62,7 @@ Pattern KnapsackSolver::solve(std::vector<Product>& products, StockType& stock, 
     return pattern;
 }
 
-double KnapsackSolver::reducedCost(Pattern& bestPattern, StockType& stock, std::vector<double>& dualPrices) {
+double KnapsackSolver::reducedCost(const Pattern& bestPattern, const StockType& stock, const std::vector<double>& dualPrices) {
     double value = 0.0;
     for(int i=0; i < dualPrices.size(); i++) {
         value += dualPrices[i] * bestPattern.quantities[i];
