@@ -1,17 +1,32 @@
 # Stockcutting
 
-A cutting stock problem solver that computes optimal cutting patterns for cutting products from stock material of different lengths.
+A Qt desktop application that solves the one-dimensional cutting stock problem and visualizes the resulting cutting plan.
+
+![Stockcutting main window](docs/screenshot.png)
 
 ## Overview
 
-The project solves the classic one-dimensional cutting stock problem: given a set of products with defined lengths and demands, find a set of cutting patterns (combinations of products that fit within a stock piece) that satisfies all demands at minimal cost.
+Given a set of products with defined lengths and demands, and a set of stock types (length, cost, availability), the application computes cutting patterns – combinations of products that fit into a single stock piece with respect to a saw width – that satisfy all demands at minimal cost.
 
-Two solver strategies are implemented, both based on the Gilmore–Gomory LP formulation solved with [GLPK](https://www.gnu.org/software/glpk/):
+The GUI lets you enter products and stocks directly, pick a solver strategy, and renders the resulting cutting plan as colored bars showing products, waste and the usage count per stock piece.
 
-- **HeuristicColumnGeneration** – starts with a trivial pattern set and iteratively generates improving patterns by solving an integer knapsack subproblem using the dual prices of the current LP relaxation.
-- **AllPattern** – enumerates every feasible cutting pattern for each stock type and solves the resulting LP/IP directly. Only practical for small problem instances.
+## Features
 
-Both solvers derive from the `StockCuttingSolver` base class and return a list of `PatternUsage` (pattern plus usage quantity).
+- Table-based input for products (name, length, demand) and stock types (name, length, amount, cost)
+- Optional saw width to account for the material lost per cut
+- Unlimited stock availability support
+- Two solver strategies (see below)
+- Visual cutting plan with per-product legend, waste and total cost
+- German and English UI (via Qt translations)
+
+## Solvers
+
+Both strategies are based on the Gilmore–Gomory LP formulation and use [GLPK](https://www.gnu.org/software/glpk/):
+
+- **Heuristic Column Generation** – starts from a trivial pattern set and iteratively improves it by solving an integer knapsack subproblem with the dual prices of the current LP relaxation. Fast and suitable for large instances.
+- **All Cutting Patterns** – enumerates every feasible pattern per stock type and solves the resulting LP/IP directly. Only practical for small instances.
+
+Both derive from the `StockCuttingSolver` base class and return a list of `PatternUsage` (pattern plus usage quantity).
 
 ## Build
 
@@ -20,7 +35,7 @@ Both solvers derive from the `StockCuttingSolver` base class and return a list o
 - CMake >= 3.16
 - C++17 compiler
 - Qt 5 or Qt 6 (Widgets, LinguistTools)
-- GLPK
+- G* (cuts > 0 ? cuts - LPK
 
 ### Ubuntu/Debian
 
@@ -41,36 +56,19 @@ Run the application:
 ./build/Stockcutting
 ```
 
-The console output prints the patterns computed by both solver strategies for the example products/stocks defined in `main.cpp`.
-
-## Project structure
-
-| File | Purpose |
-| --- | --- |
-| `main.cpp` | Entry point with example data and demo output |
-| `stockcuttingsolver.h` | Abstract base class for cutting stock solvers |
-| `heuristiccolumngeneration.{h,cpp}` | Heuristic column generation solver |
-| `allpattern.{h,cpp}` | Brute-force pattern enumeration solver |
-| `patternsolver.{h,cpp}` | Builds and solves the pattern LP/MIP with GLPK |
-| `knapsacksolver.{h,cpp}` | Integer knapsack solver for pattern generation |
-| `Product.h` | Product definition (length, demand) |
-| `StockType.h` | Stock definition (length, cost, availability) |
-| `Pattern.h` / `PatternUsage.h` | Cutting pattern and usage data structures |
-| `mainwindow.*` | Qt GUI (placeholder) |
-| `Stockcutting_de_DE.ts` | German translation |
-
 ## Usage
 
-Define products and stock types, instantiate a solver and call `solve()`:
+Enter products and stock types in the tables (use the `+` buttons to add rows, a negative amount means unlimited stock), set the saw width, select a calculation model and click **Calculate**. The resulting cutting plan is displayed on the right.
+
+To use the solvers programmatically:
 
 ```cpp
-// Products and stocks are identified by their position in the vectors
-std::vector<Product> products = {{.length = 160, .demand = 6},
-                                 {.length = 480, .demand = 7},
-                                 {.length = 735, .demand = 4}};
+std::vector<Product> products = {{.name = "P1", .length = 160, .demand = 6},
+                                 {.name = "P2", .length = 480, .demand = 7},
+                                 {.name = "P3", .length = 735, .demand = 4}};
 
-std::vector<StockType> stocks = {{.length = 2400, .cost = 1, .availabilty = -1},
-                                 {.length = 2880, .cost = 1, .availabilty = -1}};
+std::vector<StockType> stocks = {{.name = "S1", .length = 2400, .cost = 1, .availabilty = -1},
+                                 {.name = "S2", .length = 2880, .cost = 1, .availabilty = -1}};
 
 HeuristicColumnGeneration solver(products, stocks);
 std::vector<PatternUsage> result = solver.solve();

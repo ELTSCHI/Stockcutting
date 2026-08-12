@@ -4,30 +4,30 @@
 <context>
     <name>CuttingPlanWidget</name>
     <message>
-        <location filename="cuttingplanwidget.cpp" line="55"/>
+        <location filename="cuttingplanwidget.cpp" line="62"/>
         <source>Nothing calculated yet</source>
         <translation> Noch keine Berechnungen durchgeführt </translation>
     </message>
     <message>
-        <location filename="cuttingplanwidget.cpp" line="80"/>
-        <location filename="cuttingplanwidget.cpp" line="169"/>
+        <location filename="cuttingplanwidget.cpp" line="87"/>
+        <location filename="cuttingplanwidget.cpp" line="177"/>
         <source>Stock %1</source>
         <translation>Bestand %1</translation>
     </message>
     <message>
-        <location filename="cuttingplanwidget.cpp" line="134"/>
+        <location filename="cuttingplanwidget.cpp" line="142"/>
         <source>Waste: %1</source>
         <oldsource>Waste %1</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Verschnitt: %1</translation>
     </message>
     <message>
-        <location filename="cuttingplanwidget.cpp" line="136"/>
+        <location filename="cuttingplanwidget.cpp" line="144"/>
         <source>Cost: %1</source>
         <oldsource>Cost %1</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Kosten: %1</translation>
     </message>
     <message>
-        <location filename="cuttingplanwidget.cpp" line="163"/>
+        <location filename="cuttingplanwidget.cpp" line="171"/>
         <source>Product %1</source>
         <translation>Produkt %1</translation>
     </message>
