@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Stock Cutting</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LayoutDirection::LeftToRight</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
@@ -35,7 +38,7 @@
          <item>
           <widget class="QLabel" name="sawWidthLabel">
            <property name="text">
-            <string>Breite eines Schnitts</string>
+            <string>Saw Width</string>
            </property>
           </widget>
          </item>
@@ -64,7 +67,7 @@
        <item>
         <widget class="QGroupBox" name="stockGroup">
          <property name="title">
-          <string>Bestand</string>
+          <string>Stock</string>
          </property>
          <layout class="QVBoxLayout" name="stockLayout">
           <item>
@@ -83,7 +86,7 @@
        <item>
         <widget class="QGroupBox" name="productGroup">
          <property name="title">
-          <string>Zuschnitte</string>
+          <string>Products</string>
          </property>
          <layout class="QVBoxLayout" name="productLayout">
           <item>
@@ -102,13 +105,16 @@
        <item>
         <widget class="QGroupBox" name="modelGroup">
          <property name="title">
-          <string>Berechnungsmodell</string>
+          <string>Calculation Model</string>
          </property>
          <layout class="QVBoxLayout" name="modelLayout">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
           <item>
            <widget class="QRadioButton" name="radioHeuristic">
             <property name="text">
-             <string>Schnittmuster heuristisch generieren</string>
+             <string>Heuristically generate Cutting Patterns</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -118,7 +124,7 @@
           <item>
            <widget class="QRadioButton" name="radioAll">
             <property name="text">
-             <string>alle Schnittmuster</string>
+             <string>All Cutting Patterns</string>
             </property>
            </widget>
           </item>
@@ -128,7 +134,7 @@
        <item>
         <widget class="QPushButton" name="applyButton">
          <property name="text">
-          <string>Berechnen</string>
+          <string>Calculate</string>
          </property>
         </widget>
        </item>
@@ -158,8 +164,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>700</width>
-         <height>600</height>
+         <width>698</width>
+         <height>571</height>
         </rect>
        </property>
       </widget>
@@ -173,7 +179,7 @@
      <x>0</x>
      <y>0</y>
      <width>1100</width>
-     <height>25</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

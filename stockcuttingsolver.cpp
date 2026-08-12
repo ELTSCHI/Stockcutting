@@ -27,6 +27,20 @@ int findOrCreatePattern(std::vector<PatternUsage>& erg, const Pattern& newPatter
 
 }
 
+StockCuttingSolver::StockCuttingSolver(std::vector<Product>& products, std::vector<StockType>& stocks) : patternSolver(products, stocks) {
+    this->products = products;
+    this->stocks = stocks;
+}
+
+
+int StockCuttingSolver::calculateWaste(std::vector<PatternUsage>& erg) {
+    int totalWaste = 0;
+    for(int i = 0; i < erg.size(); i++) {
+        totalWaste += erg[i].quantity * erg[i].pattern.getWaste(stocks, products);
+    }
+    return totalWaste;
+}
+
 void StockCuttingSolver::removeOverproduction(std::vector<PatternUsage>& erg) {
     std::vector<int> produced;
     produced.resize(products.size(), 0);
@@ -57,3 +71,28 @@ void StockCuttingSolver::removeOverproduction(std::vector<PatternUsage>& erg) {
         }
     }
 }
+
+std::vector<PatternUsage> StockCuttingSolver::solve() {
+    // solve subclass specific
+    solveInternal();
+
+    std::vector<double> patternQuantities = patternSolver.getPrimalValues();
+    std::vector<Pattern>& patterns = patternSolver.getPatterns();
+
+    std::vector<PatternUsage> erg;
+    erg.resize(patterns.size());
+    for(int i = 0; i < patterns.size(); i++) {
+        PatternUsage patternUsage;
+        patternUsage.pattern = patterns[i];
+        patternUsage.quantity = patternQuantities[i];
+        erg[i] = patternUsage;
+
+    }
+
+    removeOverproduction(erg);
+    std::cout << calculateWaste(erg);
+
+
+    return erg;
+}
+

@@ -34,9 +34,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         patternsolver.h patternsolver.cpp
         knapsacksolver.h knapsacksolver.cpp
         heuristiccolumngeneration.h heuristiccolumngeneration.cpp
-        stockcuttingsolver.h
+        stockcuttingsolver.h stockcuttingsolver.cpp
         PatternUsage.h
         allpattern.h allpattern.cpp
+        cuttingplanwidget.h cuttingplanwidget.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -45,6 +46,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    qt_add_resources(Stockcutting "translations"
+        PREFIX "/i18n"
+        BASE "${CMAKE_CURRENT_BINARY_DIR}"
+        FILES ${QM_FILES}
+    )
 else()
     if(ANDROID)
         add_library(Stockcutting SHARED
@@ -62,6 +68,7 @@ else()
 endif()
 
 target_link_libraries(Stockcutting PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${GLPK_LIBRARY})
+target_include_directories(Stockcutting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

@@ -55,7 +55,7 @@ Pattern KnapsackSolver::solve(const std::vector<Product>& products, const StockT
 
     Pattern pattern;
     pattern.stockIndex = stockIndex;
-    pattern.quantities = quantities;
+    pattern.quantities = std::move(quantities);
 
     glp_delete_prob(lp);
 

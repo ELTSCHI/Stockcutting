@@ -23,7 +23,7 @@ public:
 
     void addPattern(const Pattern & pattern);
 
-    std::vector<Pattern> getPatterns() {
+    std::vector<Pattern>& getPatterns() {
         return patterns;
     }
 

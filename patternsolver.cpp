@@ -1,5 +1,4 @@
 #include "patternsolver.h"
-#include <iostream>
 
 PatternSolver::PatternSolver(const std::vector<Product>& products, const std::vector<StockType>& stocks) {
     this->products = products;
