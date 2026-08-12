@@ -15,7 +15,7 @@ struct Pattern {
             totalLength += products[i].length * quantities[i];
             cuts += quantities[i];
         }
-        totalLength += stocks[stockIndex].sawWidth * (cuts - 1);
+        totalLength += stocks[stockIndex].sawWidth * (cuts > 0 ? cuts - 1 : 0);
         return stocks[stockIndex].length - totalLength;
     }
 };
