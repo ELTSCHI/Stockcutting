@@ -41,6 +41,14 @@ int StockCuttingSolver::calculateWaste(std::vector<PatternUsage>& erg) {
     return totalWaste;
 }
 
+int StockCuttingSolver::calculateCost(std::vector<PatternUsage>& erg) {
+    int totalCost = 0;
+    for(int i = 0; i < erg.size(); i++) {
+        totalCost += erg[i].quantity * stocks[erg[i].pattern.stockIndex].cost;
+    }
+    return totalCost;
+}
+
 void StockCuttingSolver::removeOverproduction(std::vector<PatternUsage>& erg) {
     std::vector<int> produced;
     produced.resize(products.size(), 0);
@@ -72,7 +80,7 @@ void StockCuttingSolver::removeOverproduction(std::vector<PatternUsage>& erg) {
     }
 }
 
-std::vector<PatternUsage> StockCuttingSolver::solve() {
+Result StockCuttingSolver::solve() {
     // solve subclass specific
     solveInternal();
 
@@ -90,9 +98,10 @@ std::vector<PatternUsage> StockCuttingSolver::solve() {
     }
 
     removeOverproduction(erg);
-    std::cout << calculateWaste(erg);
+
+    Result result{.usages = erg, .cost = calculateCost(erg), .waste = calculateWaste(erg)};
 
 
-    return erg;
+    return result;
 }
 

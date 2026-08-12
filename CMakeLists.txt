@@ -38,6 +38,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         PatternUsage.h
         allpattern.h allpattern.cpp
         cuttingplanwidget.h cuttingplanwidget.cpp
+        Result.h
 
     )
 # Define target properties for Android with Qt 6 as:

@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QString>
+#include <Result.h>
 
 #include <algorithm>
 #include <cmath>
@@ -27,13 +28,13 @@ CuttingPlanWidget::CuttingPlanWidget(QWidget *parent) : QWidget(parent) {
 
 void CuttingPlanWidget::setData(std::vector<Product>& products,
                                 std::vector<StockType>& stocks,
-                                std::vector<PatternUsage>& result) {
+                                Result& result) {
     this->products = products;
     this->stocks = stocks;
-    this->result.clear();
-    for (const auto& usage : result) {
+    this->result.usages.clear();
+    for (const auto& usage : result.usages) {
         if (std::round(usage.quantity) > 0.0) {
-            this->result.push_back(usage);
+            this->result.usages.push_back(usage);
         }
     }
     setMinimumHeight(layoutHeight());
@@ -46,7 +47,7 @@ QSize CuttingPlanWidget::sizeHint() const {
 
 int CuttingPlanWidget::layoutHeight() const {
     return topMargin
-           + (int) (result.size()) * (barHeight + rowSpacing)
+        + (int) (result.usages.size()) * (barHeight + rowSpacing)
         + rowSpacing;
 }
 
@@ -54,7 +55,7 @@ void CuttingPlanWidget::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     painter.fillRect(rect(), palette().base());
 
-    if (result.empty() || products.empty() || stocks.empty()) {
+    if (result.usages.empty() || products.empty() || stocks.empty()) {
         painter.setPen(palette().placeholderText().color());
         painter.drawText(rect(), Qt::AlignCenter, tr("Nothing calculated yet"));
         return;
@@ -73,7 +74,7 @@ void CuttingPlanWidget::paintEvent(QPaintEvent*) {
     drawLegend(painter);
 
     int y = topMargin;
-    for (const auto& usage : result) {
+    for (const auto& usage : result.usages) {
         const Pattern& pattern = usage.pattern;
 
         StockType& stock = stocks[pattern.stockIndex];
@@ -133,6 +134,13 @@ void CuttingPlanWidget::paintEvent(QPaintEvent*) {
 
         y += barHeight + rowSpacing;
     }
+
+    painter.setPen(palette().text().color());
+    painter.drawText(leftMargin,y + painter.fontMetrics().height(), QString(tr("Waste: %1")).arg(result.waste));
+    y+=painter.fontMetrics().height();
+    painter.drawText(leftMargin,y + painter.fontMetrics().height(), QString(tr("Cost: %1")).arg(result.cost));
+
+
 }
 
 void CuttingPlanWidget::drawLegend(QPainter& painter) {

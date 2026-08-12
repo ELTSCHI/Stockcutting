@@ -123,7 +123,7 @@ void MainWindow::runSolver() {
     std::vector<Product> products = collectProducts();
     std::vector<StockType> stocks = collectStocks();
 
-    std::vector<PatternUsage> result;
+    Result result;
     if (ui->radioAll->isChecked()) {
         AllPattern solver(products, stocks);
         result = solver.solve();

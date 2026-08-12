@@ -7,6 +7,7 @@
 
 #include <QWidget>
 
+#include <Result.h>
 #include <vector>
 
 class CuttingPlanWidget : public QWidget
@@ -18,7 +19,7 @@ public:
 
     void setData(std::vector<Product>& products,
                  std::vector<StockType>& stocks,
-                 std::vector<PatternUsage>& result);
+                 Result& result);
 
     QSize sizeHint() const override;
 
@@ -28,7 +29,7 @@ protected:
 private:
     std::vector<Product> products;
     std::vector<StockType> stocks;
-    std::vector<PatternUsage> result;
+    Result result;
 
     int layoutHeight() const;
     void drawLegend(QPainter& painter);

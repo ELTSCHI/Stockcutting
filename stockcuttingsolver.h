@@ -5,6 +5,7 @@
 #include "Product.h"
 #include "StockType.h"
 #include "patternsolver.h"
+#include <Result.h>
 #include <iostream>
 
 
@@ -33,10 +34,11 @@ protected:
     virtual void solveInternal() = 0;
     void removeOverproduction(std::vector<PatternUsage>& erg);
     int calculateWaste(std::vector<PatternUsage>& erg);
+    int calculateCost(std::vector<PatternUsage>& erg);
 
 public:
     StockCuttingSolver(std::vector<Product>& products, std::vector<StockType>& stocks);
-    std::vector<PatternUsage> solve();
+    Result solve();
 };
 
 #endif // STOCKCUTTINGSOLVER_H
