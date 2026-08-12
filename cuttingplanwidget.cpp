@@ -37,6 +37,8 @@ void CuttingPlanWidget::setData(std::vector<Product>& products,
             this->result.usages.push_back(usage);
         }
     }
+    this->result.cost = result.cost;
+    this->result.waste = result.waste;
     setMinimumHeight(layoutHeight());
     update();
 }
@@ -125,7 +127,8 @@ void CuttingPlanWidget::paintEvent(QPaintEvent*) {
             painter.fillRect(wasteRect, QColor(0xdd, 0xdd, 0xdd));
             if (wasteW > 30 && scale > 0.0) {
                 painter.setPen(Qt::darkGray);
-                painter.drawText(wasteRect, Qt::AlignCenter, QStringLiteral("%1").arg((int) (wasteW / scale)));
+                Pattern wastePattern = pattern;
+                painter.drawText(wasteRect, Qt::AlignCenter, QString::number(wastePattern.getWaste(stocks, products)));
             }
         }
 
